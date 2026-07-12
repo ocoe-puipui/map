@@ -1,0 +1,9 @@
+# JSONデータファイルをすべて除外する
+*.json
+
+# もしサンプル用のJSON
+!sample.json
+
+# OSの一時ファイルを除外
+.DS_Store
+Thumbs.db
