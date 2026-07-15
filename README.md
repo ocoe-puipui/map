@@ -28,31 +28,9 @@
 
 ```
 map-main/
-├── index.html    # メインのHTMLファイル（地図とスタイルを含む）
-└── README.md     # プロジェクトの説明
-```
-
-## カスタマイズ
-
-### 色の変更
-
-`index.html` 内のCSSセクションで色を変更できます：
-
-```css
-/* 海の色 */
-svg {
-    background-color: #bae6fd;
-}
-
-/* 陸地の色 */
-path {
-    fill: #22c55e;
-}
-
-/* ホバー時の色 */
-path:hover {
-    fill: #15803d;
-}
+├── index.html    # HTML + JavaScript
+├── style.css     # CSSスタイル
+└── README.md     # プロジェクト説明
 ```
 
 ## ライセンス
