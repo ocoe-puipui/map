@@ -1,0 +1,87 @@
+/* --- 全体のスタイル --- */
+body {
+    font-family: sans-serif;
+    text-align: center;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 20px;
+}
+
+/* --- コンテナのスタイル（1.5倍サイズ） --- */
+.map-container {
+    max-width: 1350px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+/* --- タイトルのスタイル --- */
+h1 {
+    margin-bottom: 5px;
+    color: #1e293b;
+}
+
+/* --- 【変更】SVGのスタイル（海の色を青に） --- */
+svg {
+    width: 100%;
+    height: auto;
+    background-color: #bae6fd; /* 海の色：明るく爽やかなブルー */
+    border-radius: 4px;
+    display: block;
+}
+
+/* --- 【変更】陸地（国々）のスタイル（陸地を緑に） --- */
+path {
+    fill: #22c55e;       /* 陸地の色：鮮やかで自然なグリーン */
+    stroke: #f8fafc;     /* 国境線の色：薄い白に近いグレー */
+    stroke-width: 0.4;   /* 国境線をすこし繊細に */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* --- 【変更】ホバー時のデザイン（緑に映える濃い目の緑） --- */
+path:hover {
+    fill: #15803d;       /* マウスが乗った国：深みのある濃いグリーン */
+    stroke: #ffffff;     /* 国境線：真っ白 */
+    stroke-width: 1.5;   /* 国境線を太くしてクッキリ際立たせる */
+}
+
+/* --- 【変更】ピンポイントの場所（小さな島など） --- */
+circle {
+    fill: #22c55e;       /* 島の色：グリーン */
+    stroke: #f8fafc;
+    stroke-width: 0.4;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+circle:hover {
+    fill: #15803d;       /* マウスが乗った島：濃いグリーン */
+    stroke: #ffffff;
+    stroke-width: 1.5;
+}
+
+/* --- 固定表示用ツールチップのスタイル --- */
+#tooltip {
+    height: 24px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+/* --- 選択された国の表示スタイル --- */
+#selected-tooltip {
+    font-size: 18px;
+    font-weight: bold;
+    color: #f97316;
+    min-height: 27px;
+    margin-bottom: 10px;
+}
