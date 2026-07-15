@@ -1146,6 +1146,9 @@
             
             let foundCount = 0;
             
+            console.log('検索開始:', searchTerm);
+            console.log('対象国数:', countries.length);
+            
             countries.forEach(country => {
                 let nameEn = country.getAttribute('name') || country.getAttribute('class') || 'Unknown';
                 nameEn = nameEn.trim();
@@ -1154,11 +1157,15 @@
                 // 英語名または日本語名で検索
                 if (nameEn.toLowerCase().includes(searchTerm) || 
                     (nameJa && nameJa.toLowerCase().includes(searchTerm))) {
+                    console.log('マッチ:', nameEn, nameJa);
                     country.classList.add('highlighted');
                     highlightedCountries.push(country);
                     foundCount++;
                 }
             });
+            
+            console.log('見つかった数:', foundCount);
+            console.log('ハイライトされた国数:', highlightedCountries.length);
             
             // 検索結果をツールチップに表示
             if (foundCount > 0) {
