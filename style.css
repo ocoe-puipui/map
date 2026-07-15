@@ -85,3 +85,73 @@ circle:hover {
     min-height: 27px;
     margin-bottom: 10px;
 }
+
+/* --- 検索コンテナのスタイル --- */
+.search-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+/* --- 検索入力ボックスのスタイル --- */
+.search-input {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    width: 300px;
+    max-width: 100%;
+    transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+/* --- 検索ボタンのスタイル --- */
+.search-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-button:hover {
+    background-color: #2563eb;
+}
+
+/* --- クリアボタンのスタイル --- */
+.clear-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #64748b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clear-button:hover {
+    background-color: #475569;
+}
+
+/* --- 検索結果のハイライトスタイル --- */
+.highlighted {
+    fill: #f97316 !important;
+    stroke: #ffffff !important;
+    stroke-width: 2 !important;
+}
+
+.highlighted:hover {
+    fill: #f97316 !important;
+    stroke: #ffffff !important;
+    stroke-width: 2 !important;
+}
