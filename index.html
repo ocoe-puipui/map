@@ -11,6 +11,12 @@
     <div class="map-container">
         <h2>世界地図(World Map)</h2>
         
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="国名を検索..." class="search-input">
+            <button id="search-button" class="search-button">検索</button>
+            <button id="clear-button" class="clear-button">クリア</button>
+        </div>
+        
         <div id="selected-tooltip" style="font-size: 18px; font-weight: bold; color: #f97316; min-height: 27px; margin-bottom: 10px;"></div>
 
         <div id="tooltip">国にマウスカーソルを合わせてください</div>
@@ -1120,6 +1126,73 @@
                 selectedCountry.style.fill = '';
                 selectedTooltip.innerText = '';
                 selectedCountry = null;
+            }
+        });
+
+        // 5. 検索機能の実装
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const clearButton = document.getElementById('clear-button');
+        let highlightedCountries = [];
+
+        // 検索実行関数
+        function searchCountries() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            
+            // 前回のハイライトをクリア
+            clearHighlight();
+            
+            if (!searchTerm) return;
+            
+            let foundCount = 0;
+            
+            countries.forEach(country => {
+                let nameEn = country.getAttribute('name') || country.getAttribute('class') || 'Unknown';
+                nameEn = nameEn.trim();
+                const nameJa = countryJsonEnToJa[nameEn];
+                
+                // 英語名または日本語名で検索
+                if (nameEn.toLowerCase().includes(searchTerm) || 
+                    (nameJa && nameJa.toLowerCase().includes(searchTerm))) {
+                    country.classList.add('highlighted');
+                    highlightedCountries.push(country);
+                    foundCount++;
+                }
+            });
+            
+            // 検索結果をツールチップに表示
+            if (foundCount > 0) {
+                tooltip.innerText = `${foundCount}件見つかりました`;
+                tooltip.style.color = '#f97316';
+            } else {
+                tooltip.innerText = '見つかりませんでした';
+                tooltip.style.color = '#ef4444';
+            }
+        }
+
+        // ハイライトクリア関数
+        function clearHighlight() {
+            highlightedCountries.forEach(country => {
+                country.classList.remove('highlighted');
+            });
+            highlightedCountries = [];
+            tooltip.innerText = '国にマウスカーソルを合わせてください';
+            tooltip.style.color = '#334155';
+        }
+
+        // 検索ボタンクリック時
+        searchButton.addEventListener('click', searchCountries);
+
+        // クリアボタンクリック時
+        clearButton.addEventListener('click', () => {
+            searchInput.value = '';
+            clearHighlight();
+        });
+
+        // Enterキーで検索
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchCountries();
             }
         });
     </script>
