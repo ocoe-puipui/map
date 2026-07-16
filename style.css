@@ -155,3 +155,50 @@ circle:hover {
     stroke: #ffffff !important;
     stroke-width: 2 !important;
 }
+
+/* --- 詳細情報表示のスタイル --- */
+.country-details {
+    background-color: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 20px;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.country-details h3 {
+    margin: 0 0 12px 0;
+    color: #1e293b;
+    font-size: 20px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+}
+
+.detail-item {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #475569;
+    min-width: 80px;
+    margin-right: 12px;
+}
+
+.detail-item span:last-child {
+    color: #334155;
+}
+
+.wikipedia-link {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.wikipedia-link:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}

@@ -21,6 +21,26 @@
 
         <div id="tooltip">国にマウスカーソルを合わせてください</div>
         
+        <div id="country-details" class="country-details" style="display: none;">
+            <h3 id="detail-country-name"></h3>
+            <div class="detail-item">
+                <span class="detail-label">首都:</span>
+                <span id="detail-capital"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">人口:</span>
+                <span id="detail-population"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">面積:</span>
+                <span id="detail-area"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Wikipedia:</span>
+                <a id="detail-wikipedia" href="#" target="_blank" class="wikipedia-link">詳細を見る</a>
+            </div>
+        </div>
+        
         <svg baseprofile="tiny" fill="#ececec" height="857" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".2" version="1.2" viewbox="0 0 2000 857" width="2000" xmlns="http://www.w3.org/2000/svg">
         
         
@@ -971,6 +991,8 @@
  </circle>
  <circle cx="1798.2" cy="719.3" id="2">
  </circle>
+ <circle cx="1577" cy="421" id="SG" name="Singapore" class="Singapore">
+ </circle>
 </svg>
     
     <!-- ★ ツールチップ要素（CSSでスタイルを適用し、JSで内容と位置を制御） -->
@@ -1048,32 +1070,224 @@
         "Egypt": "エジプト", "Libya": "リビア", "Tunisia": "チュニジア",
         "Algeria": "アルジェリア", "Morocco": "モロッコ", "Western Sahara": "西サハラ",
         "Mauritania": "モーリタニア", "Mali": "マリ", "Niger": "ニジェール",
-        "Chad": "チャド", "Sudan": "スーダン", "South Sudan": "南スーダン",
-        "Eritrea": "エリトリア", "Djibouti": "ジブチ", "Ethiopia": "エチオピア",
-        "Somalia": "ソマリア", "Kenya": "ケニア", "Uganda": "ウガンダ",
-        "Tanzania": "タンザニア", "Rwanda": "ルワンダ", "Burundi": "ブルンジ",
-        "Seychelles": "セーシェル", "Madagascar": "マダガスカル", "Malawi": "マラウイ",
-        "Mozambique": "モザンビーク", "Zambia": "ザンビア", "Zimbabwe": "ジンバブエ",
-        "Botswana": "ボツワナ", "Namibia": "ナミビア", "South Africa": "南アフリカ",
-        "Lesotho": "レソト", "Eswatini": "エスワティニ(スワジランド)",
-        "Angola": "アンゴラ", "Democratic Republic of the Congo": "コンゴ民主共和国",
-        "Republic of the Congo": "コンゴ共和国", "Gabon": "ガボン",
-        "Equatorial Guinea": "赤道ギニア", "Central African Republic": "中央アフリカ",
-        "Cameroon": "カメルーン", "Nigeria": "ナイジェリア", "Benin": "ベナン",
-        "Togo": "トーゴ", "Ghana": "ガーナ", "Ivory Coast": "コートジボワール",
+        "Chad": "チャド", "Sudan": "スーダン", "Eritrea": "エリトリア",
+        "Djibouti": "ジブチ", "Ethiopia": "エチオピア", "Somalia": "ソマリア",
+        "Kenya": "ケニア", "Uganda": "ウガンダ", "Tanzania": "タンザニア",
+        "Rwanda": "ルanda", "Burundi": "ブルンジ", "Democratic Republic of the Congo": "コンゴ民主共和国",
+        "Republic of Congo": "コンゴ共和国", "Gabon": "ガボン", "Equatorial Guinea": "赤道ギニア",
+        "Sao Tome and Principe": "サントメ・プリンシペ", "Cameroon": "カメルーン",
+        "Nigeria": "ナイジェリア", "Benin": "ベナン", "Togo": "トーゴ",
+        "Ghana": "ガーナ", "Ivory Coast": "コートジボワール", "Burkina Faso": "ブルキナファソ",
         "Liberia": "リベリア", "Sierra Leone": "シエラレオネ", "Guinea": "ギニア",
-        "Guinea-Bissau": "ギニアビサウ", "Gambia": "ガンビア", "Senegal": "セネガル",
-        "Cape Verde": "カーボベルデ", "Sao Tome and Principe": "サントメ・プリンシペ",
-        "Mauritius": "モーリシャス", "Comoros": "コモロ",
+        "Guinea-Bissau": "ギニアビサウ", "Senegal": "セネガル", "Gambia": "ガンビア",
+        "Central African Republic": "中央アフリカ共和国", "South Sudan": "南スーダン",
+        "Angola": "アンゴラ", "Zambia": "ザンビア", "Zimbabwe": "ジンバブエ",
+        "Botswana": "ボツワナ", "Namibia": "ナミビア", "South Africa": "南アフリカ",
+        "Lesotho": "レソト", "Eswatini": "エスワティニ", "Madagascar": "マダガスカル",
+        "Mozambique": "モザンビーク", "Malawi": "マラウイ", "Comoros": "コモロ",
+        "Mauritius": "モーリシャス", "Seychelles": "セーシェル"
+    };
 
-        // その他・特殊な領域名
-        "Greenland": "グリーンランド", "Antarctica": "南極大陸"
+    // ★ 国の詳細情報データベース（人口、首都、面積、Wikipediaリンク）
+    const countryDetails = {
+        "Japan": { capital: "東京", population: "1.25億人", area: "377,975 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC" },
+        "China": { capital: "北京", population: "14.1億人", area: "9,596,961 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD" },
+        "South Korea": { capital: "ソウル", population: "5,174万人", area: "100,210 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E5%A4%A7%E9%9F%93%E6%B0%91%E5%9B%BD" },
+        "Taiwan": { capital: "台北", population: "2,357万人", area: "36,197 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E5%8F%B0%E6%B9%BE" },
+        "North Korea": { capital: "平壌", population: "2,600万人", area: "120,540 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E6%9C%9D%E9%AE%AE%E6%B0%91%E4%B8%BB%E4%B8%BB%E7%BE%A9%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD" },
+        "Mongolia": { capital: "ウランバートル", population: "340万人", area: "1,564,116 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%B3%E3%82%B4%E3%83%AB" },
+        "Vietnam": { capital: "ハノイ", population: "9,816万人", area: "331,212 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%88%E3%83%8A%E3%83%A0" },
+        "Laos": { capital: "ビエンチャン", population: "740万人", area: "236,800 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%A9%E3%82%AA%E3%82%B9" },
+        "Cambodia": { capital: "プノンペン", population: "1,671万人", area: "181,035 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%B3%E3%83%9C%E3%82%B8%E3%82%A2" },
+        "Thailand": { capital: "バンコク", population: "7,160万人", area: "513,120 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4" },
+        "Myanmar": { capital: "ネピドー", population: "5,404万人", area: "676,578 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%9F%E3%83%A3%E3%83%B3%E3%83%9E%E3%83%BC" },
+        "Malaysia": { capital: "クアラルンプール", population: "3,237万人", area: "329,847 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%AC%E3%83%BC%E3%82%B7%E3%82%A2" },
+        "Singapore": { capital: "シンガポール", population: "592万人", area: "728 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%B7%E3%83%B3%E3%82%AC%E3%83%9D%E3%83%BC%E3%83%AB" },
+        "Indonesia": { capital: "ジャカルタ", population: "2.76億人", area: "1,904,569 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%A4%E3%83%B3%E3%83%89%E3%83%8D%E3%82%B7%E3%82%A2" },
+        "Philippines": { capital: "マニラ", population: "1.14億人", area: "300,000 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%AA%E3%83%94%E3%83%B3" },
+        "Brunei": { capital: "バンダルスリブガワン", population: "44万人", area: "5,765 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%AB%E3%83%8D%E3%82%A4" },
+        "East Timor": { capital: "ディリ", population: "132万人", area: "14,874 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E6%9D%B1%E3%83%86%E3%82%A3%E3%83%A2%E3%83%BC%E3%83%AB" },
+        "India": { capital: "ニューデリー", population: "14.2億人", area: "3,287,263 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%A4%E3%83%B3%E3%83%89" },
+        "Pakistan": { capital: "イスラマバード", population: "2.31億人", area: "881,913 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%91%E3%82%AD%E3%82%B9%E3%82%BF%E3%83%B3" },
+        "Bangladesh": { capital: "ダッカ", population: "1.69億人", area: "147,570 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%90%E3%83%B3%E3%82%B0%E3%83%A9%E3%83%87%E3%82%B7%E3%83%A5" },
+        "Sri Lanka": { capital: "スリジャヤワルダナプラコッテ", population: "2,200万人", area: "65,610 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%B9%E3%83%AA%E3%83%A9%E3%83%B3%E3%82%AB" },
+        "Nepal": { capital: "カトマンズ", population: "3,000万人", area: "147,181 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%8D%E3%83%91%E3%83%BC%E3%83%AB" },
+        "Bhutan": { capital: "ティンプー", population: "78万人", area: "38,394 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%BC%E3%82%BF%E3%83%B3" },
+        "Maldives": { capital: "マレ", population: "54万人", area: "298 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%AB%E3%83%87%E3%82%A3%E3%83%96" },
+        "Australia": { capital: "キャンベラ", population: "2,600万人", area: "7,692,024 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%AA%E3%83%BC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%AA%E3%82%A2" },
+        "New Zealand": { capital: "ウェリントン", population: "512万人", area: "268,021 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B8%E3%83%BC%E3%83%A9%E3%83%B3%E3%83%89" },
+        "Papua New Guinea": { capital: "", population: "", area: "", wikipedia: "" },
+        "Fiji": { capital: "", population: "", area: "", wikipedia: "" },
+        "Solomon Islands": { capital: "", population: "", area: "", wikipedia: "" },
+        "Vanuatu": { capital: "", population: "", area: "", wikipedia: "" },
+        "Samoa": { capital: "", population: "", area: "", wikipedia: "" },
+        "Tonga": { capital: "", population: "", area: "", wikipedia: "" },
+        "Tuvalu": { capital: "", population: "", area: "", wikipedia: "" },
+        "Kiribati": { capital: "", population: "", area: "", wikipedia: "" },
+        "Nauru": { capital: "", population: "", area: "", wikipedia: "" },
+        "Palau": { capital: "", population: "", area: "", wikipedia: "" },
+        "Micronesia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Marshall Islands": { capital: "", population: "", area: "", wikipedia: "" },
+        "United States": { capital: "ワシントンD.C.", population: "3.33億人", area: "9,833,520 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%A1%E3%83%AA%E3%82%AB%E5%90%88%E8%A1%86%E5%9B%BD" },
+        "Canada": { capital: "オタワ", population: "3,800万人", area: "9,984,670 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%8A%E3%83%80" },
+        "Mexico": { capital: "メキシコシティ", population: "1.29億人", area: "1,964,375 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%AD%E3%82%B7%E3%82%B3" },
+        "Guatemala": { capital: "", population: "", area: "", wikipedia: "" },
+        "Belize": { capital: "", population: "", area: "", wikipedia: "" },
+        "El Salvador": { capital: "", population: "", area: "", wikipedia: "" },
+        "Honduras": { capital: "", population: "", area: "", wikipedia: "" },
+        "Nicaragua": { capital: "", population: "", area: "", wikipedia: "" },
+        "Costa Rica": { capital: "", population: "", area: "", wikipedia: "" },
+        "Panama": { capital: "", population: "", area: "", wikipedia: "" },
+        "Cuba": { capital: "", population: "", area: "", wikipedia: "" },
+        "Jamaica": { capital: "", population: "", area: "", wikipedia: "" },
+        "Haiti": { capital: "", population: "", area: "", wikipedia: "" },
+        "Dominican Republic": { capital: "", population: "", area: "", wikipedia: "" },
+        "Bahamas": { capital: "", population: "", area: "", wikipedia: "" },
+        "Brazil": { capital: "ブラジリア", population: "2.14億人", area: "8,515,767 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%A9%E3%82%B8%E3%83%AB" },
+        "Argentina": { capital: "ブエノスアイレス", population: "4,600万人", area: "2,780,400 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%AB%E3%82%BC%E3%83%B3%E3%83%81%E3%83%B3" },
+        "Chile": { capital: "サンティアゴ", population: "1,960万人", area: "756,102 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%81%E3%83%AA" },
+        "Colombia": { capital: "ボゴタ", population: "5,160万人", area: "1,141,748 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%AD%E3%83%B3%E3%83%93%E3%82%A2" },
+        "Peru": { capital: "リマ", population: "3,400万人", area: "1,285,216 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%9A%E3%83%AB%E3%83%BC" },
+        "Venezuela": { capital: "カラカス", population: "2,800万人", area: "916,445 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%8D%E3%82%BA%E3%82%A8%E3%83%A9" },
+        "Ecuador": { capital: "キト", population: "1,800万人", area: "283,561 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%A8%E3%82%AF%E3%82%A2%E3%83%89%E3%83%AB" },
+        "Bolivia": { capital: "スクレ（行政）/ラパス（立法）", population: "1,200万人", area: "1,098,581 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%9C%E3%83%AA%E3%83%93%E3%82%A2" },
+        "Paraguay": { capital: "アスンシオン", population: "720万人", area: "406,752 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%91%E3%83%A9%E3%82%B0%E3%82%A2%E3%82%A4" },
+        "Uruguay": { capital: "モンテビデオ", population: "350万人", area: "176,215 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%A6%E3%83%AB%E3%82%B0%E3%82%A2%E3%82%A4" },
+        "Guyana": { capital: "", population: "", area: "", wikipedia: "" },
+        "Suriname": { capital: "", population: "", area: "", wikipedia: "" },
+        "Russia": { capital: "モスクワ", population: "1.44億人", area: "17,098,246 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%AD%E3%82%B7%E3%82%A2" },
+        "Russian Federation": { capital: "モスクワ", population: "1.44億人", area: "17,098,246 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%AD%E3%82%B7%E3%82%A2" },
+        "United Kingdom": { capital: "ロンドン", population: "6,700万人", area: "242,495 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%A4%E3%82%AE%E3%83%AA%E3%82%B9" },
+        "France": { capital: "パリ", population: "6,800万人", area: "643,801 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%95%E3%83%A9%E3%83%B3%E3%82%B9" },
+        "Germany": { capital: "ベルリン", population: "8,400万人", area: "357,022 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%83%89%E3%82%A4%E3%83%84" },
+        "Italy": { capital: "ローマ", population: "5,900万人", area: "301,340 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%A4%E3%82%BF%E3%83%AA%E3%82%A2" },
+        "Spain": { capital: "マドリード", population: "4,700万人", area: "505,990 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%B9%E3%83%9A%E3%82%A4%E3%83%B3" },
+        "Portugal": { capital: "", population: "", area: "", wikipedia: "" },
+        "Netherlands": { capital: "", population: "", area: "", wikipedia: "" },
+        "Belgium": { capital: "", population: "", area: "", wikipedia: "" },
+        "Luxembourg": { capital: "", population: "", area: "", wikipedia: "" },
+        "Switzerland": { capital: "", population: "", area: "", wikipedia: "" },
+        "Austria": { capital: "", population: "", area: "", wikipedia: "" },
+        "Ireland": { capital: "", population: "", area: "", wikipedia: "" },
+        "Iceland": { capital: "", population: "", area: "", wikipedia: "" },
+        "Norway": { capital: "", population: "", area: "", wikipedia: "" },
+        "Sweden": { capital: "", population: "", area: "", wikipedia: "" },
+        "Finland": { capital: "", population: "", area: "", wikipedia: "" },
+        "Denmark": { capital: "", population: "", area: "", wikipedia: "" },
+        "Estonia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Latvia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Lithuania": { capital: "", population: "", area: "", wikipedia: "" },
+        "Poland": { capital: "", population: "", area: "", wikipedia: "" },
+        "Czech Republic": { capital: "", population: "", area: "", wikipedia: "" },
+        "Slovakia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Hungary": { capital: "", population: "", area: "", wikipedia: "" },
+        "Romania": { capital: "", population: "", area: "", wikipedia: "" },
+        "Bulgaria": { capital: "", population: "", area: "", wikipedia: "" },
+        "Greece": { capital: "", population: "", area: "", wikipedia: "" },
+        "Albania": { capital: "", population: "", area: "", wikipedia: "" },
+        "North Macedonia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Serbia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Croatia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Slovenia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Bosnia and Herzegovina": { capital: "", population: "", area: "", wikipedia: "" },
+        "Montenegro": { capital: "", population: "", area: "", wikipedia: "" },
+        "Kosovo": { capital: "", population: "", area: "", wikipedia: "" },
+        "Ukraine": { capital: "", population: "", area: "", wikipedia: "" },
+        "Belarus": { capital: "", population: "", area: "", wikipedia: "" },
+        "Moldova": { capital: "", population: "", area: "", wikipedia: "" },
+        "Malta": { capital: "", population: "", area: "", wikipedia: "" },
+        "Cyprus": { capital: "", population: "", area: "", wikipedia: "" },
+        "Turkey": { capital: "", population: "", area: "", wikipedia: "" },
+        "Syria": { capital: "", population: "", area: "", wikipedia: "" },
+        "Lebanon": { capital: "", population: "", area: "", wikipedia: "" },
+        "Israel": { capital: "", population: "", area: "", wikipedia: "" },
+        "Palestine": { capital: "", population: "", area: "", wikipedia: "" },
+        "Jordan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Iraq": { capital: "", population: "", area: "", wikipedia: "" },
+        "Iran": { capital: "", population: "", area: "", wikipedia: "" },
+        "Saudi Arabia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Kuwait": { capital: "", population: "", area: "", wikipedia: "" },
+        "Bahrain": { capital: "", population: "", area: "", wikipedia: "" },
+        "Qatar": { capital: "", population: "", area: "", wikipedia: "" },
+        "United Arab Emirates": { capital: "", population: "", area: "", wikipedia: "" },
+        "Oman": { capital: "", population: "", area: "", wikipedia: "" },
+        "Yemen": { capital: "", population: "", area: "", wikipedia: "" },
+        "Afghanistan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Kazakhstan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Uzbekistan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Turkmenistan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Kyrgyzstan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Tajikistan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Georgia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Armenia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Azerbaijan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Egypt": { capital: "カイロ", population: "1.04億人", area: "1,001,450 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E3%82%A8%E3%82%B8%E3%83%97%E3%83%88" },
+        "Libya": { capital: "", population: "", area: "", wikipedia: "" },
+        "Tunisia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Algeria": { capital: "", population: "", area: "", wikipedia: "" },
+        "Morocco": { capital: "", population: "", area: "", wikipedia: "" },
+        "Western Sahara": { capital: "", population: "", area: "", wikipedia: "" },
+        "Mauritania": { capital: "", population: "", area: "", wikipedia: "" },
+        "Mali": { capital: "", population: "", area: "", wikipedia: "" },
+        "Niger": { capital: "", population: "", area: "", wikipedia: "" },
+        "Chad": { capital: "", population: "", area: "", wikipedia: "" },
+        "Sudan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Eritrea": { capital: "", population: "", area: "", wikipedia: "" },
+        "Djibouti": { capital: "", population: "", area: "", wikipedia: "" },
+        "Ethiopia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Somalia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Kenya": { capital: "", population: "", area: "", wikipedia: "" },
+        "Uganda": { capital: "", population: "", area: "", wikipedia: "" },
+        "Tanzania": { capital: "", population: "", area: "", wikipedia: "" },
+        "Rwanda": { capital: "", population: "", area: "", wikipedia: "" },
+        "Burundi": { capital: "", population: "", area: "", wikipedia: "" },
+        "Democratic Republic of the Congo": { capital: "", population: "", area: "", wikipedia: "" },
+        "Republic of Congo": { capital: "", population: "", area: "", wikipedia: "" },
+        "Gabon": { capital: "", population: "", area: "", wikipedia: "" },
+        "Equatorial Guinea": { capital: "", population: "", area: "", wikipedia: "" },
+        "Sao Tome and Principe": { capital: "", population: "", area: "", wikipedia: "" },
+        "Cameroon": { capital: "", population: "", area: "", wikipedia: "" },
+        "Nigeria": { capital: "", population: "", area: "", wikipedia: "" },
+        "Benin": { capital: "", population: "", area: "", wikipedia: "" },
+        "Togo": { capital: "", population: "", area: "", wikipedia: "" },
+        "Ghana": { capital: "", population: "", area: "", wikipedia: "" },
+        "Ivory Coast": { capital: "", population: "", area: "", wikipedia: "" },
+        "Liberia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Sierra Leone": { capital: "", population: "", area: "", wikipedia: "" },
+        "Guinea": { capital: "", population: "", area: "", wikipedia: "" },
+        "Guinea-Bissau": { capital: "", population: "", area: "", wikipedia: "" },
+        "Senegal": { capital: "", population: "", area: "", wikipedia: "" },
+        "Central African Republic": { capital: "", population: "", area: "", wikipedia: "" },
+        "South Sudan": { capital: "", population: "", area: "", wikipedia: "" },
+        "Angola": { capital: "", population: "", area: "", wikipedia: "" },
+        "Zambia": { capital: "", population: "", area: "", wikipedia: "" },
+        "Zimbabwe": { capital: "", population: "", area: "", wikipedia: "" },
+        "Botswana": { capital: "", population: "", area: "", wikipedia: "" },
+        "Namibia": { capital: "", population: "", area: "", wikipedia: "" },
+        "South Africa": { capital: "プレトリア（行政）/ケープタウン（立法）/ブルームフォンテーン（司法）", population: "6,000万人", area: "1,221,037 km²", wikipedia: "https://ja.wikipedia.org/wiki/%E5%8D%97%E3%82%A2%E3%83%95%E3%83%AA%E3%82%AB" },
+        "Lesotho": { capital: "", population: "", area: "", wikipedia: "" },
+        "Eswatini": { capital: "", population: "", area: "", wikipedia: "" },
+        "Madagascar": { capital: "", population: "", area: "", wikipedia: "" },
+        "Mozambique": { capital: "", population: "", area: "", wikipedia: "" },
+        "Malawi": { capital: "", population: "", area: "", wikipedia: "" },
+        "Comoros": { capital: "", population: "", area: "", wikipedia: "" },
+        "Mauritius": { capital: "", population: "", area: "", wikipedia: "" },
+        "Seychelles": { capital: "", population: "", area: "", wikipedia: "" },
+        "Afghanistan": { capital: "", population: "", area: "", wikipedia: "" }
     };
 
     // 💡 地図の上の新しいエリア（selected-tooltip）を取得します
         const selectedTooltip = document.getElementById('selected-tooltip');
         let selectedCountry = null;
         const svgElement = document.querySelector('svg');
+        
+        // 詳細情報表示エリア
+        const countryDetailsPanel = document.getElementById('country-details');
+        const detailCountryName = document.getElementById('detail-country-name');
+        const detailCapital = document.getElementById('detail-capital');
+        const detailPopulation = document.getElementById('detail-population');
+        const detailArea = document.getElementById('detail-area');
+        const detailWikipedia = document.getElementById('detail-wikipedia');
 
         countries.forEach(country => {
             // 1. マウスホバー（乗せたとき）の処理 ⇒ 【地図の下（tooltip）】に表示
@@ -1105,6 +1319,7 @@
                 if (selectedCountry === country) {
                     country.style.fill = ''; // 元の緑に戻す
                     selectedTooltip.innerText = ''; // 地図の上の文字を消す
+                    countryDetailsPanel.style.display = 'none'; // 詳細情報を非表示
                     selectedCountry = null;
                 }
                 // 【選択】別の国をクリックした場合
@@ -1117,6 +1332,23 @@
                     // 地図の上の新しい文字エリアに国名を表示
                     selectedTooltip.innerText = `${displayName}`;
                     selectedCountry = country;
+                    
+                    // 詳細情報を表示（常に表示、データがない場合は空白）
+                    const details = countryDetails[nameEn] || { capital: "", population: "", area: "", wikipedia: "" };
+                    detailCountryName.innerText = displayName;
+                    detailCapital.innerText = details.capital || "";
+                    detailPopulation.innerText = details.population || "";
+                    detailArea.innerText = details.area || "";
+                    
+                    // Wikipediaリンクの設定
+                    if (details.wikipedia) {
+                        detailWikipedia.href = details.wikipedia;
+                        detailWikipedia.style.display = 'inline';
+                    } else {
+                        detailWikipedia.style.display = 'none';
+                    }
+                    
+                    countryDetailsPanel.style.display = 'block';
                 }
             });
         });
@@ -1126,6 +1358,7 @@
             if (selectedCountry) {
                 selectedCountry.style.fill = '';
                 selectedTooltip.innerText = '';
+                countryDetailsPanel.style.display = 'none'; // 詳細情報を非表示
                 selectedCountry = null;
             }
         });
